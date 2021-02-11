@@ -11,26 +11,32 @@ using namespace std;
 /*
     Thought process =>
 
-    <tag1 value = "value">
+    <tag1 name = "amogh"> // tags
     <tag2 name = "name">
     </tag2>
     </tag1> 
     <tag3 another="another" final="final">
     </tag3>
-
     => 
-    tag1~value = value
+    tag1~name = amogh // queries
     tag2~name = name
     tag3~another = another
     tag3~final = final
 
-    =>  
-    line 1 => parentTags.push(tag1) => [tag1] ; { tag1~value : value }
-    line 2 => if (parentTags exist) => 'tag1' => tag1.tag2~name : name => {tag1~value : value, tag1.tag2~name : name } => parenttag.push(tag2)
-    line 3 => [tag1, tag2], { tag1~value : value, tag1.tag2~name : name } => [tag1]
-    line 4 => [tag1] => []; 
-    line 5 => {tag1~value : value, tag1.tag2~name : name, tag3~another: another, tag3~final: final } => [tag3]
-    line 6 => [tag3] => [];
+    Create array -> parentTags = []
+    Create hashmap to store parsed tags attributes and their values
+    Loop through tags =>
+        If opening tag -> parentTags.push_back(tagName) -> [tag1, tag2]
+        If ending tag -> remove last element of parentTags -> parentTags.pop_back(tagName) -> [tag1]
+        In each tagline find attribute name and value -> (attrName = name, value = amogh)
+        Generate prefix for that line by joining parentTags-> [tag1,tag2] -> tag1.tag2
+        For each attrName, join withit  prefix using "~" -> tag1.tag2~name
+        Insert the resultant attrName and its value as key and value respectively in hashmap
+        i.e -> {
+                    "tag1.tag2~name" : "name",
+                }
+        Read through queries and for each query check if it exists in hashmap
+        If exists print its value, if not print "Not found!"
 */
 
 int main () {
